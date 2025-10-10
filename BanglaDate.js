@@ -1,4 +1,3 @@
-
 // English to Bangla number convert
 function enToBnNumber(num){
   const map={'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
@@ -23,6 +22,13 @@ function getBanglaDate(today){
 }
 
 
+function formatTime(now){
+  let h=now.getHours(), m=now.getMinutes();
+  const ampm=h>=12?'PM':'AM';
+  h=h%12||12;
+  return enToBnNumber(h)+":"+enToBnNumber(m.toString().padStart(2,'0'))+" "+ampm;
+}
+
 function runForDesktop(){
   const now=new Date();
   const banglaDate=getBanglaDate(now);
@@ -31,20 +37,13 @@ function runForDesktop(){
   const monthName=now.toLocaleString('bn-BD',{month:'long'});
   const gregorian=dayName+", "+enToBnNumber(now.getDate())+" "+monthName+" "+enToBnNumber(now.getFullYear());
 
-  let h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();
-  const ampm=h>=12?'PM':'AM';
-  h=h%12||12;
-  const timeStr=enToBnNumber(h)+":"+enToBnNumber(m.toString().padStart(2,'0'))+":"+enToBnNumber(s.toString().padStart(2,'0'))+" "+ampm;
-
-  // পিসি ভার্সনের element
   const timeEl=document.getElementById('time');
   const dateEl=document.getElementById('date');
   if(timeEl && dateEl){
-    timeEl.textContent=timeStr;
-    dateEl.textContent=gregorian+" | "+fullBanglaDate;
+    timeEl.textContent = formatTime(now);
+    dateEl.textContent = gregorian+" | "+fullBanglaDate;
   }
 }
-
 
 function runForMobile(){
   const now=new Date();
@@ -54,20 +53,13 @@ function runForMobile(){
   const monthName=now.toLocaleString('bn-BD',{month:'long'});
   const gregorian=dayName+", "+enToBnNumber(now.getDate())+" "+monthName+" "+enToBnNumber(now.getFullYear());
 
-  let h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();
-  const ampm=h>=12?'PM':'AM';
-  h=h%12||12;
-  const timeStr=enToBnNumber(h)+":"+enToBnNumber(m.toString().padStart(2,'0'))+":"+enToBnNumber(s.toString().padStart(2,'0'))+" "+ampm;
-
-
   const timeEl=document.getElementById('mobile-time');
   const dateEl=document.getElementById('mobile-date');
   if(timeEl && dateEl){
-    timeEl.textContent=timeStr;
-    dateEl.textContent=gregorian+" | "+fullBanglaDate;
+    timeEl.textContent = formatTime(now);
+    dateEl.textContent = gregorian+" | "+fullBanglaDate;
   }
 }
-
 
 function detectAndRun(){
   if(window.innerWidth <= 768){
@@ -77,12 +69,10 @@ function detectAndRun(){
   }
 }
 
-
 document.addEventListener("DOMContentLoaded", function(){
   detectAndRun();
-  setInterval(detectAndRun, 1000);
+  setInterval(detectAndRun, 1000); 
 });
-
 
 window.addEventListener("resize", function(){
   detectAndRun();
