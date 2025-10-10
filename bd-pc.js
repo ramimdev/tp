@@ -22,23 +22,68 @@ function getBanglaDate(today){
   return {day:banglaDay,month:banglaMonths[(monthIndex+12)%12],year:by};
 }
 
-// Update date & time
-function updateDateTime(){
+// ✅ পিসির জন্য স্ক্রিপ্ট
+function runForDesktop(){
   const now=new Date();
   const banglaDate=getBanglaDate(now);
   const fullBanglaDate=enToBnNumber(banglaDate.day)+" "+banglaDate.month+" "+enToBnNumber(banglaDate.year)+" বঙ্গাব্দ";
   const dayName=banglaDays[now.getDay()];
   const monthName=now.toLocaleString('bn-BD',{month:'long'});
   const gregorian=dayName+", "+enToBnNumber(now.getDate())+" "+monthName+" "+enToBnNumber(now.getFullYear());
+
   let h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();
   const ampm=h>=12?'PM':'AM';
   h=h%12||12;
   const timeStr=enToBnNumber(h)+":"+enToBnNumber(m.toString().padStart(2,'0'))+":"+enToBnNumber(s.toString().padStart(2,'0'))+" "+ampm;
-  document.getElementById('time').textContent=timeStr;
-  document.getElementById('date').textContent=gregorian+" | "+fullBanglaDate;
+
+  // পিসি ভার্সনের element
+  const timeEl=document.getElementById('time');
+  const dateEl=document.getElementById('date');
+  if(timeEl && dateEl){
+    timeEl.textContent=timeStr;
+    dateEl.textContent=gregorian+" | "+fullBanglaDate;
+  }
 }
 
-document.addEventListener("DOMContentLoaded",function(){
-  updateDateTime();
-  setInterval(updateDateTime,1000);
+// ✅ মোবাইলের জন্য স্ক্রিপ্ট
+function runForMobile(){
+  const now=new Date();
+  const banglaDate=getBanglaDate(now);
+  const fullBanglaDate=enToBnNumber(banglaDate.day)+" "+banglaDate.month+" "+enToBnNumber(banglaDate.year)+" বঙ্গাব্দ";
+  const dayName=banglaDays[now.getDay()];
+  const monthName=now.toLocaleString('bn-BD',{month:'long'});
+  const gregorian=dayName+", "+enToBnNumber(now.getDate())+" "+monthName+" "+enToBnNumber(now.getFullYear());
+
+  let h=now.getHours(),m=now.getMinutes(),s=now.getSeconds();
+  const ampm=h>=12?'PM':'AM';
+  h=h%12||12;
+  const timeStr=enToBnNumber(h)+":"+enToBnNumber(m.toString().padStart(2,'0'))+":"+enToBnNumber(s.toString().padStart(2,'0'))+" "+ampm;
+
+  // মোবাইল ভার্সনের element
+  const timeEl=document.getElementById('mobile-time');
+  const dateEl=document.getElementById('mobile-date');
+  if(timeEl && dateEl){
+    timeEl.textContent=timeStr;
+    dateEl.textContent=gregorian+" | "+fullBanglaDate;
+  }
+}
+
+// ✅ ডিভাইস অনুযায়ী অটো ডিটেক্ট
+function detectAndRun(){
+  if(window.innerWidth <= 768){
+    runForMobile();
+  } else {
+    runForDesktop();
+  }
+}
+
+// প্রথমবার লোড হলে
+document.addEventListener("DOMContentLoaded", function(){
+  detectAndRun();
+  setInterval(detectAndRun, 1000);
+});
+
+// কেউ স্ক্রিন ছোট/বড় করলে (responsive handle)
+window.addEventListener("resize", function(){
+  detectAndRun();
 });
