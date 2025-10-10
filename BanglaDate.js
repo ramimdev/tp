@@ -22,7 +22,7 @@ function getBanglaDate(today){
   return {day:banglaDay,month:banglaMonths[(monthIndex+12)%12],year:by};
 }
 
-// ✅ পিসির জন্য স্ক্রিপ্ট
+
 function runForDesktop(){
   const now=new Date();
   const banglaDate=getBanglaDate(now);
@@ -45,7 +45,7 @@ function runForDesktop(){
   }
 }
 
-// ✅ মোবাইলের জন্য স্ক্রিপ্ট
+
 function runForMobile(){
   const now=new Date();
   const banglaDate=getBanglaDate(now);
@@ -59,7 +59,7 @@ function runForMobile(){
   h=h%12||12;
   const timeStr=enToBnNumber(h)+":"+enToBnNumber(m.toString().padStart(2,'0'))+":"+enToBnNumber(s.toString().padStart(2,'0'))+" "+ampm;
 
-  // মোবাইল ভার্সনের element
+
   const timeEl=document.getElementById('mobile-time');
   const dateEl=document.getElementById('mobile-date');
   if(timeEl && dateEl){
@@ -68,7 +68,7 @@ function runForMobile(){
   }
 }
 
-// ✅ ডিভাইস অনুযায়ী অটো ডিটেক্ট
+
 function detectAndRun(){
   if(window.innerWidth <= 768){
     runForMobile();
@@ -77,13 +77,13 @@ function detectAndRun(){
   }
 }
 
-// প্রথমবার লোড হলে
+
 document.addEventListener("DOMContentLoaded", function(){
   detectAndRun();
   setInterval(detectAndRun, 1000);
 });
 
-// কেউ স্ক্রিন ছোট/বড় করলে (responsive handle)
+
 window.addEventListener("resize", function(){
   detectAndRun();
 });
